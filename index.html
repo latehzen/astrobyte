@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AstroByte - MetaMask ile Ödeme</title>
+    <style>
+        /* Genel Stil */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #2c3e50, #4ca1af);
+            color: #ffffff;
+        }
+
+        /* Konteyner */
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px 50px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            max-width: 400px;
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: scale(1.05);
+        }
+
+        /* AstroByte Başlık */
+        #logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #ffec99;
+            text-shadow: 0 4px 15px rgba(255, 236, 153, 0.8);
+        }
+
+        #logo img {
+            width: 50px;
+            height: 50px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        /* MetaMask Butonu */
+        #metaMaskButton {
+            margin: 20px auto;
+            width: 50px;
+            height: 50px;
+            background: url('https://cdn.iconscout.com/icon/free/png-256/metamask-2728406-2261817.png') no-repeat center center / contain;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #metaMaskButton:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Buton */
+        #connectButton {
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #f39c12, #e74c3c);
+            color: #ffffff;
+            box-shadow: 0 4px 20px rgba(243, 156, 18, 0.6);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #connectButton:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Durum Mesajı */
+        #status {
+            margin-top: 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-shadow: 0 2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Responsive Tasarım */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            #logo {
+                font-size: 2rem;
+                border-radius: 10px;
+            }
+
+            #connectButton {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+
+            #metaMaskButton {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="logo">
+            
+            <img src="https://r.resimlink.com/b9MV8ey2.webp" alt="AstroByte Logo">
+            <br>
+            AstroByte
+        </div>
+        <br>
+        <h2>Aramıza Hoşgeldin</h2>
+        
+        <button id="metaMaskButton" title="MetaMask'e Bağlan"></button>
+        <br>
+        <button id="connectButton">Cüzdanı Bağla</button>
+        <p id="status"></p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
+    <script>
+        const recipientAddress = "0x434A5eD35Df1C3C143Cd341E81050145F3590837"; // Hedef cüzdan adresi
+        const amountToSend = "0.02"; // Gönderilecek miktar (ETH)
+
+        let userAddress = null;
+
+        // MetaMask'e bağlanma
+        document.getElementById("connectButton").addEventListener("click", async () => {
+            const statusElement = document.getElementById("status");
+            try {
+                if (!window.ethereum) {
+                    statusElement.textContent = "MetaMask bulunamadı. Lütfen kurun.";
+                    return;
+                }
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send("eth_requestAccounts", []);
+                const signer = provider.getSigner();
+                userAddress = await signer.getAddress();
+
+                statusElement.textContent = `Bağlandı: ${userAddress}`;
+            } catch (error) {
+                console.error(error);
+                statusElement.textContent = "Bağlantı başarısız.";
+            }
+        });
+    </script>
+</body>
+</html>
